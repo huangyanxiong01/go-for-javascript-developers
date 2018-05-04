@@ -58,30 +58,43 @@
 ## Preface
 
 Often, a developer will use more than one programming language at a certain timeframe. Switching back and forth between languages can come with some overhead. These context switches can also result in bugs. For instance, if you switch back and forth between Python and Javascript, there's a likelihood you'll mistake evaluation of an empty array between truthy and falsey. Similarly, if you switch back and forth between Go and Javascript, there's a likelihood you'll mistake `switch` statements default behavior of break/fallthrough. Outlining the differences between languages can help mitigate these potential issues, and make it easier to transition back and forth.
+通常，开发者在某个期间都会使用多个编程语言。在多个语言之间切换会带来某些开销。在语言之间的上下文也可能错误发生。例如，如果你在Python和Javascript之间来回切换，有可能你会错误地评估一个空数组array是true还是false。同样的，如果你在Go与Javascript之间来回切换，有可能你会错误地评估`switch`声名的默认行为是往下走还是跳过。概述语言之间的差异可以帮助解决潜在问题，并且可以更容易地在多个语言来回转换
 
 This document compares between two programming languages, Golang (or "Go") and ECMAScript (or "Javascript" / "JS"). The merits of this pairing is the popularity of these languages. That's it. They are not similar, in fact, they are quite different. Javascript is an event driven, dynamically typed and interpreted language, while Go is a statically typed and compiled language.
+这个文档是 Golang (or "Go") and ECMAScript (or "Javascript" / "JS")两个编程语言之间的比较。值得比较的是两个语言都是流行的语言。其实。它们并不相似。Javascript是事件驱动，动态类型的解释性语言，Go是静态类型编译性语言
 
 If you're reading this there's a high chance you already know your Javascript and are just starting with Go. If so, make sure you first complete [A tour of go](https://tour.golang.org) and [Effective go](https://golang.org/doc/effective_go.html).
+如果你正在阅读这个篇文章说明你已经熟悉Javascript并且开始使用Go [A tour of go](https://tour.golang.org) and [Effective go](https://golang.org/doc/effective_go.html)
 
 ## Which language should I use?
+## 我应该使用那个语言？
 
 You should always pick the right tool for the right job. Unfortunately, there will never be a simple formula that will instruct you which programming language you should choose to complete a given task.
+你应该始终为正确的任务选择合适的工具。 不幸的是，永远不会有一个简单的公式来指导您选择哪种编程语言来完成给定的任务。
+
 
 ![science is more art than science](/images/science_art.png)
 
 Aside of technical considerations, other considerations, such as community adoption are also important. It was [reported](http://highscalability.com/blog/2014/2/26/the-whatsapp-architecture-facebook-bought-for-19-billion.html) that Facebook moved away from the Erlang language because it was hard to find qualified programmers.
+除了技术上的考虑外，其他考虑因素（如社区采用）也很重要。 这是[报道]（http://highscalability.com/blog/2014/2/26/the-whatsapp-architecture-facebook-bought-for-19-billion.html）Facebook从Erlang语言转移出去，因为它 很难找到合格的程序员。
 
 Having said that, it is worthy to note that Javascript excels in I/O intense applications, and less so in CPU intense applications.
+话虽如此，值得注意的是，Javascript擅长I/O密集型应用程序，在轻CPU密集型应用程序中也是如此。
 
 ## Semantics
+## 语义
 Each subchapter/subject is denoted with (D),(S) or (B) to indicate how it compares across both languages with 'mostly **D**ifferent', 'mostly **S**imilar' or 'mostly **B**oth'.
+每个子章节使用（D），（S）或（B）表示如何在两种语言中比较'**不同**'，'**相似**'或'**都一样**'。
 
 This document uses ECMAScript 2015 (ES6).
 Also, some subjects will note the run-time environment "NodeJS".
+本文档使用ECMAScript 2015（ES6）。 另外，有些章节需要注意运行环境是“NodeJS”。
 
 ## Contributions
 This document is a work in progress. Contributions and PRs are most welcomed.
 If you edit the chapters layout, be sure to rebuild the table of contents by
+这份文档还在处理中，欢迎贡献和PR。
+如果你对章节进行过编辑，请使用以下命令重新构建并且通过
 ```bash
 npm install
 npm run toc
@@ -96,30 +109,45 @@ npm run build
 ```
 
 # Internals
-## (S) Heap/Stack Memory Allocation
+# 内部机制
+## (S) Heap/Stack 内存分配
 Concepts such "Heap" and "Stack" are abstracted away in both languages. You do not needed to worry about it. Even though GO has pointers, it uses [escape analysis](http://blog.rocana.com/golang-escape-analysis) in compile-time to figure out the memory allocation.
-## (S) Garbage Collection
+“堆”和“堆栈”这样的概念在两种语言中都被抽象出来。你不需要担心它。尽管GO有指针，但它在编译时使用[escape analysis]（http://blog.rocana.com/golang-escape-analysis）来计算内存分配。
+## (S) Garbage Collection(内存回收)
 Garbage collection is implemented in both languages.
-## (D) Compilation
+## (D) Compilation(编译)
 Go is compiled. Javascript is not, though some Javascript runtimes use JIT compilation. From the developer experience perspective, the biggest effect of compiled languages is compile-time safety. You get compile-time safety with Go, while in Javascript you can use external code linters to ease the missing of this feature.
+Go是需要编译的而Javascript不需要，Javascript运行是通过JIT编译
+Go是需要编译。Javascript不是，尽管一些Javascript运行时使用JIT编译。从开发人员的经验角度来看，编译语言的最大影响是编译时安全。您可以通过Go获得编译时安全性，而在Javascript中，您可以使用外部代码库来缓解此功能的缺失。
 
 # Concurrency & Parallelism
-
+# 并发 & 并行
 ## (D) Overview
+## (D) 概述
 
 **JS**
 
 The best way to describe Parallelism in Javascript is with this [quote](http://debuggable.com/posts/understanding-node-js:4bd98440-45e4-4a9a-8ef7-0f7ecbdd56cb) by Felix Geisendörfer:
 >  Well, in node everything runs in parallel, except your code.
 
+最好的描述Javascript并行机制的文章 [quote](http://debuggable.com/posts/understanding-node-js:4bd98440-45e4-4a9a-8ef7-0f7ecbdd56cb) by Felix Geisendörfer:
+>  在Node.js除了你的代码，所有都是并行运行的
+
 So while your Javascript runtime may use multiple threads for IO, your own code is getting run just by one. That's just how the *evented* model works.
 Different Javascript runtimes offer some options for concurrency or parallelism: NodeJS offers [clustering](https://nodejs.org/docs/latest/api/cluster.html), and Browsers offer [web workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers).
+
+所以，当你的Javascript运行时使用多个线程进行IO操作时，你自己的代码只运行一次。 这就是*evented*模型的工作原理。
+不同的Javascript运行时为并发或并行提供了一些选项：NodeJS提供[clustering]（https://nodejs.org/docs/latest/api/cluster.html），浏览器提供[web workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers).
 
 **Go**
 
 On the other hand, Go is all about a concurrency which enables parallelism. It offers Goroutines which enables functions to run concurrently, and channels to communicate between them. While Go standard library has the "sync" package for synchronization primitives, it [encourages](https://blog.golang.org/share-memory-by-communicating) more the use of Goroutines and channels, summarized as:
 
+另一方面，Go是关于并行性的并发性。 它提供了Goroutines，它使功能可以同时运行，并可以在它们之间进行通信。 虽然Go标准库具有同步原语的“同步”包，但它[鼓励]（https://blog.golang.org/share-memory-by-communicating）更多地使用Goroutines和channels，总结如下：
+
 > Do not communicate by sharing memory; instead, share memory by communicating
+
+> 不要通过共享内存来通讯，应该通过通讯共享内存
 
 More on this subject:
 - [Go Concurrency Patterns](https://talks.golang.org/2012/concurrency.slide#1)
@@ -130,20 +158,25 @@ More on this subject:
 **JS**
 
 JS promotes writing async APIs, since sync APIs always block the caller, e.g:
+JS提倡编写异步API，因为同步API总是会被阻塞，例如：
 ```Javascript
 const fs = require('fs');
 
 // The caller to this function will be blocked while the file is being read.
+// 当文件开始读取时，调用者调用这个函数将会被阻塞
 function fetchA() {
    return fs.readFileSync('a.txt');
 }
 ```
 In the example above, the async `fs.readFile()` would be a better choice in most scenarios, making `fetchA()` async and unblocking its caller.
+在上面的示例里，异步`fs.readFile()`是最佳的选择，让`fetchA()`不会阻塞调用者
 
 **Go**
 
 On the other hand, Go promotes the sync APIs (see “Avoid concurrency in your API” in https://talks.golang.org/2013/bestpractices.slide#26)
 The reasoning behind this is that it is completely up to the caller's choice to be blocked or not by a sync API. Consider the following type definition and sync `fetchA` function:
+在另一方面，Go优先是使用同步API，(see “Avoid concurrency in your API” in https://talks.golang.org/2013/bestpractices.slide#26)
+是否被阻塞完全取决于调用者。 考虑下面的类型定义和同步`fetchA`函数：
 ```Go
 type fetchResult struct {
 	Message string
@@ -156,10 +189,12 @@ func fetchA() fetchResult {
 }
 ```
 If the caller wants to be blocked, then he can just call the function
+如果调用者想使用被阻塞方式，那么它可以如下调用这个函数
 ```Go
 	a := fetchA()
 ```
 If the caller does not want to be blocked, then he could call the function inside a goroutine:
+如果调用者不想被阻塞，那么它可以使用goroutine调用这个函数
 ```Go
 	aChan := make(chan fetchResult, 0)
 	go func(c chan fetchResult) {
@@ -168,13 +203,17 @@ If the caller does not want to be blocked, then he could call the function insid
 ```
 
 ## (D) Sequential and Concurrent Patterns
+## (D) 串行与并发模式
 
 **JS**
 
 Even without parallelism, we can structure Javascript code in both sequential and concurrent flows.
 For the following exmaples, let’s assume `fetchA()`, `fetchB()` and `fetchC()` are all async functions returning a promise.
 
-**Sequential**
+即使没有并行性，我们也可以在串行和并发流程中构造Javascript代码。
+对于下面的例子，假设`fetchA（）`，`fetchB（）`和`fetchC（）`都是返回promise的异步函数。
+
+**串行**
 
 ```Javascript
 function fetchSequential() {
@@ -190,7 +229,8 @@ function fetchSequential() {
 }
 ```
 
-or 
+## (D) 串行与并发模式
+或者 
 
 ```Javascript
 async function fetchSequential() {
@@ -203,7 +243,7 @@ async function fetchSequential() {
 }
 ```
 
-**Concurrent**
+**并发**
 
 ```Javascript
 function fetchConcurrent() {
@@ -213,7 +253,7 @@ function fetchConcurrent() {
 }
 ```
 
-or
+或者
 
 ```Javascript
 async function fetchConcurrent() {
@@ -226,7 +266,9 @@ async function fetchConcurrent() {
 
 For the following examples, assume `fetchB()` and `fetchC()` are defined as a sync function similarly to `fetchA` in the previous section (The full example is available here https://play.golang.org/p/2BVwtos4-j)
 
-**Sequential**
+对于下面的例子，假设`fetchB（）`和`fetchC（）`被定义为一个同步函数，类似于前一节中的`fetchA`（完整的例子可以在这里https://play.golang.org/p/2BVwtos4-j）
+
+**串行**
 
 ```Go
 func fetchSequential() {
@@ -238,7 +280,7 @@ func fetchSequential() {
 	fmt.Println(c)
 }
 ```
-**Concurrent**
+**并发**
 
 ```Go
 func fetchConcurrent() {
@@ -304,8 +346,10 @@ func fetchConcurrent() {
 **JS**
 
 As of es6, the Javascript spec includes a module system, however the external specs of AMD and CommonJS are also popular since the language began to address this issue rather late.
+从es6开始，Javascript规范包含一个模块系统，然而AMD和CommonJS的外部规格也很流行，因为语言开始解决这个问题的时间比较晚。
 
 Before es6 modules, the spec only supported the *script* mode, of which every file shares the same top-level global scope. This means that there was no official "file scope" for scripts. In practice, file-module scope was common since it was either introduced by code (`window.moduleA = …`), an external tool (requireJS), or by a runtime that baked-in a module system (NodeJS).
+在es6模块之前，该规范仅支持* script *模式，其中每个文件共享相同的顶级全局范围。 这意味着对于脚本没有官方的“文件范围”。 在实践中，文件模块作用域很常见，因为它是由代码（`window.moduleA = ...`），外部工具（requireJS）引入的，或者是由模块系统（NodeJS）中的烘焙运行时引入的。
 
 Therefore, it is safe to say that Javascript programs are commonly structured with a 1-to-1 relationship between files and modules with local scope.
 
