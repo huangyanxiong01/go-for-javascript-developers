@@ -58,10 +58,10 @@
 ## Preface
 
 Often, a developer will use more than one programming language at a certain timeframe. Switching back and forth between languages can come with some overhead. These context switches can also result in bugs. For instance, if you switch back and forth between Python and Javascript, there's a likelihood you'll mistake evaluation of an empty array between truthy and falsey. Similarly, if you switch back and forth between Go and Javascript, there's a likelihood you'll mistake `switch` statements default behavior of break/fallthrough. Outlining the differences between languages can help mitigate these potential issues, and make it easier to transition back and forth.
-通常，开发者在某个期间都会使用多个编程语言。在多个语言之间切换会带来某些开销。在语言之间的上下文也可能错误发生。例如，如果你在Python和Javascript之间来回切换，有可能你会错误地评估一个空数组array是true还是false。同样的，如果你在Go与Javascript之间来回切换，有可能你会错误地评估`switch`声名的默认行为是往下走还是跳过。概述语言之间的差异可以帮助解决潜在问题，并且可以更容易地在多个语言来回转换
+通常，开发者在某个期时间段都会同时使用多个编程语言。经常在多个语言之间切换会带来某些开销。在语言之间的上下文也有可能导致发生错误的结果。例如，如果你在Python和Javascript之间来回切换，很有可能你会错误地评估一个空数组array是true还是false。同样的，如果你在Go与Javascript之间来回切换，有可能你会错误地评估`switch`声名的默认行为是往下走还是跳过。总结语言之间的差异可以帮助你解决这些潜在问题，并且可以更容易地在多个语言来回切换
 
 This document compares between two programming languages, Golang (or "Go") and ECMAScript (or "Javascript" / "JS"). The merits of this pairing is the popularity of these languages. That's it. They are not similar, in fact, they are quite different. Javascript is an event driven, dynamically typed and interpreted language, while Go is a statically typed and compiled language.
-这个文档是 Golang (or "Go") and ECMAScript (or "Javascript" / "JS")两个编程语言之间的比较。值得比较的是两个语言都是流行的语言。其实。它们并不相似。Javascript是事件驱动，动态类型的解释性语言，Go是静态类型编译性语言
+这个文档是 Golang (or "Go") and ECMAScript (or "Javascript" / "JS")两个编程语言之间的比较。值得比较的是这两个都是流行的编程语言。它们并不相似。Javascript是事件驱动，动态类型的解释性语言，Go是静态类型编译性语言
 
 If you're reading this there's a high chance you already know your Javascript and are just starting with Go. If so, make sure you first complete [A tour of go](https://tour.golang.org) and [Effective go](https://golang.org/doc/effective_go.html).
 如果你正在阅读这个篇文章说明你已经熟悉Javascript并且开始使用Go [A tour of go](https://tour.golang.org) and [Effective go](https://golang.org/doc/effective_go.html)
@@ -70,13 +70,13 @@ If you're reading this there's a high chance you already know your Javascript an
 ## 我应该使用那个语言？
 
 You should always pick the right tool for the right job. Unfortunately, there will never be a simple formula that will instruct you which programming language you should choose to complete a given task.
-你应该始终为正确的任务选择合适的工具。 不幸的是，永远不会有一个简单的公式来指导您选择哪种编程语言来完成给定的任务。
+你应该始终为正确的任务选择合适的工具。 不幸的是，永远不会有一个简单的公式来指导您选择那种编程语言来完成指定的任务。
 
 
 ![science is more art than science](/images/science_art.png)
 
 Aside of technical considerations, other considerations, such as community adoption are also important. It was [reported](http://highscalability.com/blog/2014/2/26/the-whatsapp-architecture-facebook-bought-for-19-billion.html) that Facebook moved away from the Erlang language because it was hard to find qualified programmers.
-除了技术上的考虑外，其他考虑因素（如社区采用）也很重要。 这是[报道]（http://highscalability.com/blog/2014/2/26/the-whatsapp-architecture-facebook-bought-for-19-billion.html）Facebook从Erlang语言转移出去，因为它 很难找到合格的程序员。
+除了技术上的考虑外，其他考虑因素（如社区采用）也很重要。 这是[报道]（http://highscalability.com/blog/2014/2/26/the-whatsapp-architecture-facebook-bought-for-19-billion.html）Facebook从Erlang语言转移出去，因为它很难找到合格的程序员。
 
 Having said that, it is worthy to note that Javascript excels in I/O intense applications, and less so in CPU intense applications.
 话虽如此，值得注意的是，Javascript擅长I/O密集型应用程序，在轻CPU密集型应用程序中也是如此。
@@ -298,6 +298,7 @@ func fetchConcurrent() {
 	}(cChan)
 
 	// order doesn't really matter!
+	// 下面的顺序并不重要
 	a := <-aChan
 	b := <-bChan
 	c := <-cChan
@@ -352,23 +353,32 @@ Before es6 modules, the spec only supported the *script* mode, of which every fi
 在es6模块之前，该规范仅支持* script *模式，其中每个文件共享相同的顶级全局范围。 这意味着对于脚本没有官方的“文件范围”。 在实践中，文件模块作用域很常见，因为它是由代码（`window.moduleA = ...`），外部工具（requireJS）引入的，或者是由模块系统（NodeJS）中的烘焙运行时引入的。
 
 Therefore, it is safe to say that Javascript programs are commonly structured with a 1-to-1 relationship between files and modules with local scope.
+因此，可以说Javascript程序通常是在本地作用域内通过文件和模块之间的1对1关系构建的。
 
 **Go**
 
 Go's import statement and package support were part of the spec from the beginning. In Go there is no file scope, only package scope. As of Go 1.6 (or 1.5 + flag), there's better support for encapsulating dependent packages inside a project with the [vendor folder](https://blog.gopheracademy.com/advent-2015/vendor-folder/). However, it doesn't attempt to solve everything:
+Go的导入声明和软件包支持从一开始就是规范的一部分。在Go中没有文件作用域，仅有包的作用域。从Go 1.6（或1.5 +标识）开始使用[vendor文件夹]（https://blog.gopheracademy.com/advent-2015/vendor-folder/）更好地支持在项目中封装依赖包。 但是，它并不试图解决所有问题：
 > … this does not attempt to solve the problem of vendoring resulting in multiple copies of a package being linked into a single binary. Sometimes having multiple copies of a library is not a problem; sometimes it is. At least for now, it doesn’t seem that the go command should be in charge of policing or solving that problem.
 
 **The differences**
 
 A Javascript module can be any valid Javascript type. By exporting an object, it can *package* multiple functionalities. By exporting a function it can surface a single functionality. On the other hand, a Go package, is as its a name- just a package. So while a Javascript module can be directly invoked if it is a function type, this is not a possibility with a Go package.
 
+Javascript模块可以通过导出一个包含任何类型的对象。Go也可以打包多个函数。通过导出单个函数可以表现出单一个功能。在另一方面，Go包，就像它的名字一样只是一个包。所以，如果一个Javascript模块是一个函数类型，可以直接调用它，但这对于一个Go包来说并不可行。
+
 Another difference is the consumption of other internal components within your project. In Javascript, since each file is (usually) a module, then each of the files that were decoupled from the current file must be imported. On the other hand, in Go, all files within the same package can have access to each other since there is no file scope.
+另一个不同之处在于您的项目中其他内部组件的调用。 在Javascript中，通常一个文件就是一个模块，它们之间调用就必须将文件导入到当前文件中。 另一方面，在Go中，同一个包中的所有文件都可以访问对方，因为Go是没有文件的作用域。
 
 ## Management
 
 For Javascript development, NPM is the de-facto package manager for NodeJS, and may also be used for client side projects. Bower is also a popular for client side projects.
 
 The `go get` tool will only get you as far as getting a dependency latest master code. This will not suffice if you need accurate dependency management with pinned versions. The Go community came up with several package managers, here's a partial list:
+
+对于Javascript开发，NPM是NodeJS的包管理器，也可以用于客户端项目。 `Bower`对于客户端项目也很受欢迎。
+
+`go get`工具只会让你获得最新依赖的主代码。 如果您需要使用固定版本或者进行精确的依赖关系管理，遗憾的是它做不了。 Go社区提出了几个包管理器，这里是一个部分列表：
 
 - https://github.com/kovetskiy/manul
 - https://github.com/tools/godep
@@ -378,13 +388,17 @@ The `go get` tool will only get you as far as getting a dependency latest master
 - https://github.com/mattn/gom
 
 Go has acknowledged the need for a dependency management tool by starting its own project: [dep](https://github.com/golang/dep). As of the time of writing, it is still in Alpha phase, and not part of official Go toolchain yet. Watch that project [roadmap](https://github.com/golang/dep/wiki/Roadmap) for status updates!
+Go官方启动了自己的依赖管理工具：[dep]（https://github.com/golang/dep）。 截至撰写本文时，它仍处于Alpha阶段，而不是官方Go工具链的一部分。 观看该项目[路线图]（https://github.com/golang/dep/wiki/Roadmap）了解状态更新！
 
 # Error Handling
+# 错误处理
 ## (B) Flow control and values
+## (B) 流控制与值
 
 Both languages pass errors as regular values. Also, both languages leverage flow control constructs: Javascript uses `throw` `catch` `finally` block, and Go uses [`panic` `recover` `defer` ](https://blog.golang.org/defer-panic-and-recover)
 
 ## (D) Usage
+## (D) 用法
 Despite the similarity claimed above, the languages differ on how and when errors are handled:
 
 **JS**
@@ -408,8 +422,10 @@ While passing errors as values, one drawback is the loss of stack trace. Both la
 - Go: [errgo](https://github.com/juju/errgo)
 
 # Keywords & Syntax Comparison
+# 关键词 & 语法比较
 
 ## (D) `this` keyword
+## (D) `this` 关键词
 **JS**
 
 Inside an object method, `this` refers to the object (with some exceptions).
@@ -430,12 +446,13 @@ func (this *Boo) Foo() string {
 It is more idiomatic to use short variables as receivers. In the example above `b` would have been a better fit over `this`.
 
 ## (D) `new` keyword
+## (D) `new` 关键词
 **JS**
 
 `new Foo()` instantiates an object from `Foo`, a constructor function or a class.
 
 **Go**
-
+instantiates
 `new(T)` allocates zeroed storage for a new item of type `T` and returns a pointer, `*T`. This is different than Javascript and most other languages where `new` will **initialize** the object, while in Golang it only **zeros** it.
 
 It is worthy to mention that it is [idiomatic](https://blog.golang.org/package-names) to name methods with a "New" prefix to denote it returns a pointer to the type following in the method name. e.g:
@@ -444,6 +461,7 @@ timer := time.NewTimer(d) // timer is a *time.Timer
 ```
 
 ## (D) bind / method values
+## (D) 方法绑定
 
 **JS**
 ```Javascript
@@ -468,7 +486,6 @@ time.AfterFunc(3*time.Second, somefunction)
 ```
 
 ## (D) setInterval / ticker
-
 **JS**
 ```Javascript
 setInterval(somefunction, 3*1000)
@@ -485,6 +502,7 @@ go func() {
 ```
 
 ## (D) String literals
+## (D) 字符串
 **JS**
 
 Strings are initialized with single quotes (`'hello'`) or double quotes (`"hello"`), yet most coding styles prefer the single quotes variation. Raw string literals use backticks (``` `hello` ```).
@@ -494,10 +512,13 @@ Strings are initialized with single quotes (`'hello'`) or double quotes (`"hello
 Strings are initialized with double quotes (`"hello"`) or raw string literals with backticks (``` `hello` ```)
 
 ## (S) Comments
+## (S) 注释
 Both languages use the same `/* block comments */`  and `// line comments`.
 
 # Variables
+# 变量
 ## (D) Values, Pointers, References
+## (D) 值, 指针, 引用
 
 In Javascript there are value types and reference types. Primitives such as `string` and `number` are value types. Objects, including arrays and functions, are reference types.
 
@@ -544,10 +565,13 @@ fmt.Println(a.message == b.message) // prints "true"
 ```
 
 ## Types
+## 类型
 TBD
 
 # Flow control statements
+# 流控制声明
 ## (B) Loops and iteration
+## (B) 轮询与迭代
 ### For
 **JS**
 ```Javascript
@@ -565,7 +589,7 @@ for i := 0; i < 10; i++ {
 
 ### While
 In Go, the `for`'s init and post statement are optional, effectively making it also a "while" statement:
-
+在Go中，`for`的init和post语句是可选的，有效地使它成为“while”语句：
 **JS**
 ```Javascript
 var i=0;
@@ -584,6 +608,7 @@ for i < 10 {
 }
 ```
 ### Iterating over an Array/Slice
+### 迭代Array/Slice
 
 **JS**
 ```Javascript
@@ -603,6 +628,8 @@ for i, v := range []string{"Rick", "Morty", "Beth", "Summer", "Jerry"} {
 ## (B) If/Else
 Go's `if` can contain an init statement, with variables declared scoped only to the `if` and `else` blocks.
 
+Go的`if`可以包含一个初始化语句，声明变量作用域范围仅是`if`和`else`块的范围。
+
 **Go**
 ```Go
 if value := getSomeValue(); value < limit {
@@ -618,6 +645,12 @@ The switch statement was one of the motivation for writing this document.
 Go defaults to break, and `fallthrough` needed for otherwise.
 
 Javascript defaults to fallthrough, and `break` needed for otherwise.
+
+switch语句是编写此文档的动机之一。
+
+Go默认情况下中断执行，否则需要`fallthrough`来声明继续执行。
+
+Javascript默认情况下是穿透性的，否则就需要`break`中断执行。
 
 **JS**
 ```Javascript
@@ -652,12 +685,15 @@ default:
 
 # Functions
 ## (S) first-class functions
+## (S) 函数即是类
 Both languages treat functions as first-class citizens. Both allow functions to be passed as arguments, to be a returned value, to be nested, and have closures.
-
+两种语言都把函数当作为类。 两者都允许函数作为参数传递，作为返回值，被嵌套，并且具有闭包。
 Function nesting in Javascript can be done both with named and anonymous functions, while in Go this can only be done with anonymous functions.
-
+Javascript中的函数嵌套可以使用命名和匿名函数，而在Go中，只能使用匿名函数。
 ## (D) Multiple returns
+## (D) 多个返回值
 Go functions can return multiple values
+Go函数可以返回多个值
 
 **Go**
 ```Go
@@ -671,7 +707,7 @@ func main() {
 }
 ```
 Javascript cannot, however by using destructuring assignment syntax, we can get a similar behavior
-
+javascript不能返回多个值，但是可以通过解构赋值的语法获得类似行为
 **JS**
 ```Javascript
 function hello() {
@@ -683,6 +719,8 @@ console.log(a,b);
 ```
 
 ## (S) IIFE
+
+> 即时调用函数表达式（英文：immediately-invoked function expression，缩写：IIFE）
 
 **JS**
 ```Javascript
@@ -701,7 +739,10 @@ func main() {
 ```
 
 ## (S) Closures
+## (S) 闭包 Closures
 Both languages have closures. Both require caution when [creating closures inside loops](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures#Creating_closures_in_loops_A_common_mistake). Here are examples in both languages that demonstrate a similar technique to bypass the closure/loop trap:
+
+两个语言都有闭包，当在循环中创建闭包都需要谨慎[creating closures inside loops]（https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures#Creating_closures_in_loops_A_common_mistake）。 以下是两种语言的示例，它展示了一种类似的技术来绕过闭合/循环陷阱：
 
 **JS (with bug)**
 ```Javascript
